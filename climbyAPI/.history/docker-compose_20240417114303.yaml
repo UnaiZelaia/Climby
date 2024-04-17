@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  climby:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DBPORT: 5432
+      HOST: postgres
+      USERNAME: climby
+      PASSWORD: 123
+      DB_URL: "host=postgres user=climby password=123 port=5432 sslmode=disable TimeZone=Europe/Madrid"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: climby
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: climbydb
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

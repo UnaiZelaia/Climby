@@ -1,0 +1,10 @@
+version: "3"
+services:
+  climby-be:
+  container_name: climby-be
+  build: .
+  image: climby-be
+  restart: unless-stopped
+  environment:
+    DATABASE_CLIENT: postgres
+    DATABASE_HOST: 
