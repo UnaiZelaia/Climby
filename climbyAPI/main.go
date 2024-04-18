@@ -49,5 +49,5 @@ func main() {
 	r.DELETE("/api/v1/comment/:id", middlewares.RequireAuth, controllers.DeleteComment)
 	r.DELETE("/api/v1/cimb/:id", middlewares.RequireAuth, controllers.DeleteClimb)
 
-	r.Run()
+	r.RunTLS(":3000", "certs/selfsigned.crt", "certs/selfsigned.key")
 }
