@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mapsFragment"
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="Map" />
+    <item
+        android:id="@+id/myRoutesFragment"
+        android:icon="@android:drawable/ic_input_get"
+        android:title="Routes" />
+    <item
+        android:id="@+id/myProfileFragment"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="Profile" />
+    <item
+        android:id="@+id/myClimbsFragment"
+        android:icon="@android:drawable/checkbox_on_background"
+        android:title="Climbs" />
+</menu>
