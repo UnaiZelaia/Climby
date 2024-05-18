@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "443:3000"
+      - "3030:3000"
     environment:
       PORT: 3000
       DBPORT: 5432
@@ -16,6 +16,7 @@ services:
       DB_URL: "host=postgres user=climby password=123 port=5432 dbname=climbydb sslmode=disable TimeZone=Europe/Madrid"
     depends_on:
       - postgres
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; ./entrypoint.sh'
 
   postgres:
     image: postgres:latest

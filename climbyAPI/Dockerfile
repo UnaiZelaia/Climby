@@ -39,6 +39,7 @@ RUN chmod +x entrypoint.sh
 
 # Copy the .env file
 COPY .env .
+COPY --from=builder /app/certs ./certs
 
 # Set the entry point
 ENTRYPOINT ["/root/entrypoint.sh"]

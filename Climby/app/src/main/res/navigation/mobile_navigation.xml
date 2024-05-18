@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/profileFragment">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.climby.climby.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.climby.climby.ui.dashboard.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
+
+    <fragment
+        android:id="@+id/navigation_notifications"
+        android:name="com.climby.climby.ui.notifications.NotificationsFragment"
+        android:label="@string/title_notifications"
+        tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.climby.climby.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/climbsRecycler"
+        android:name="com.climby.climby.ClimbsRecycler"
+        android:label="fragment_climbs_recycler"
+        tools:layout="@layout/fragment_climbs_recycler" />
+    <fragment
+        android:id="@+id/routesRecycler"
+        android:name="com.climby.climby.RoutesRecycler"
+        android:label="fragment_routes_recycler"
+        tools:layout="@layout/fragment_routes_recycler" >
+        <action
+            android:id="@+id/action_routesRecycler_to_routeDetailFragment"
+            app:destination="@id/routeDetailFragment" />
+        <action
+            android:id="@+id/action_routesRecycler_to_newRouteFragment"
+            app:destination="@id/newRouteFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/routeDetailFragment"
+        android:name="com.climby.climby.RouteDetailFragment"
+        android:label="fragment_route_detail"
+        tools:layout="@layout/fragment_route_detail" />
+    <fragment
+        android:id="@+id/newRouteFragment"
+        android:name="com.climby.climby.NewRouteFragment"
+        android:label="fragment_new_route"
+        tools:layout="@layout/fragment_new_route" />
+</navigation>

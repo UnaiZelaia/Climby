@@ -108,6 +108,7 @@ func Signup(ctx *gin.Context) {
 
 	if ctx.ShouldBindJSON(&body) != nil {
 		ctx.JSON(400, gin.H{"error": "Bad request"})
+		return
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
@@ -139,7 +140,7 @@ func Login(ctx *gin.Context) {
 		Password string
 	}
 
-	if ctx.BindJSON(&body) != nil {
+	if ctx.ShouldBindJSON(&body) != nil {
 		ctx.JSON(400, gin.H{"error": "Bad request"})
 		return
 	}
@@ -150,12 +151,14 @@ func Login(ctx *gin.Context) {
 
 	if result.Error != nil {
 		ctx.JSON(500, gin.H{"error": "User not found"})
+		return
 	}
 
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
 		ctx.JSON(401, gin.H{"error": "Unauthorized"})
+		return
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
@@ -167,11 +170,15 @@ func Login(ctx *gin.Context) {
 
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": "Error signing token"})
+		return
 	}
 
 	ctx.SetSameSite(http.SameSiteLaxMode)
-	ctx.SetCookie("Authorization", tokenString, 3600*24*30, "", "localhost", false, true)
-	ctx.JSON(200, gin.H{"token": tokenString})
+	ctx.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
+
+	response := gin.H{"token": tokenString}
+	response["id"] = user.ID
+	ctx.JSON(200, response)
 }
 
 func Logout(ctx *gin.Context) {

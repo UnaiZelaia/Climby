@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/baseline_profile_24"
+        android:title="@string/title_profile" />
+
+    <item
+        android:id="@+id/routesRecycler"
+        android:icon="@drawable/baseline_route_24"
+        android:title="@string/title_routes" />
+
+    <item
+        android:id="@+id/climbsRecycler"
+        android:icon="@drawable/baseline_climb_24"
+        android:title="@string/title_climbs" />
+</menu>
