@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-19T18:31:11.837346226Z">
+        <DropdownSelection timestamp="2024-05-19T20:02:19.782204930Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="LocalEmulator" identifier="path=/home/unai/.android/avd/Pixel_3_API_VanillaIceCream.avd" />

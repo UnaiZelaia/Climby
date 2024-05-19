@@ -20,5 +20,5 @@
         android:clickable="true"
         android:src="@android:drawable/ic_menu_add"
         android:translationX="330dp"
-        android:translationY="550dp" />
+        android:translationY="500dp" />
 </FrameLayout>
