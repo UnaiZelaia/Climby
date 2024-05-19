@@ -78,7 +78,9 @@ public class RegisterFragment extends Fragment {
                         public void run() {
                             boolean ok = DataAccess.registerUser(email, username, password);
                             if (ok){
-                                if(DataAccess.getTokenFromLogin(email, password, getContext())){
+                                int userId = DataAccess.getTokenFromLogin(email, password, getContext());
+                                SharedData.userId = userId;
+                                if(userId != 0){
                                    Intent intent = new Intent(getContext(), MainActivity.class);
                                    startActivity(intent);
                                 }

@@ -20,6 +20,14 @@ public class Climb {
     public Climb() {
     }
 
+    public Climb(int id, LocalDateTime date, String comment, int routeId, int userProfileId) {
+        this.id = id;
+        this.date = date;
+        this.comment = comment;
+        this.routeId = routeId;
+        this.userProfileId = userProfileId;
+    }
+
     public int getId() {
         return id;
     }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    app:navGraph="@navigation/mobile_navigation">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/routeNameHolder"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:text="Name of the route"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/climbDateHolder"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:paddingTop="8dp"
+            android:text="Date of the route"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>

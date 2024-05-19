@@ -1,0 +1,23 @@
+Backend:
+    - Strived to create a professional grade backend.
+    - Written in go.
+    - Used Gin for the http router.
+    - Support for middleware.
+    - Used authentication middleware.
+    - Load sensitive information from .env file
+    - Used GORM as the ORM.
+    - Database schema written programatically with the help of GORM.
+    - Automatic database migration.
+    - Dockerized using docker compose to pull the database image, no need for any setup.
+    - Optimized the dockerization by bringing it down in size. From more than 1GB to around 40MB using multi stage builds, Alpine linux image and only using necessary files.
+    - Secured using authentication tokens.  
+    - Cookie support and automatic cookie setting.
+    - Extremely fast and multithreated thanks to go's http library.
+    - HTTPS support with self-signed certificates.
+
+Frontend:
+    - Android app using MVVM architecture.
+    - Room database for persistency even without data from the web service.
+    - Used BottomNavBar for navigation.
+    - Cookie handling with OkHttp's cookie jar.
+    - Apart from that, fairly simple android app, since it wasn't the focus of the application.

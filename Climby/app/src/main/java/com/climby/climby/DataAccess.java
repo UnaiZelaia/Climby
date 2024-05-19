@@ -3,6 +3,7 @@ package com.climby.climby;
 import android.content.Context;
 import android.util.Log;
 
+import com.climby.climby.model.Climb;
 import com.climby.climby.model.PersistentCookieJar;
 import com.climby.climby.model.Route;
 import com.climby.climby.model.UserProfile;
@@ -14,8 +15,13 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 
 import okhttp3.CookieJar;
@@ -32,8 +38,14 @@ public class DataAccess {
     static OkHttpClient client;
     static UserProfile userProfile;
     static List<Route> routes;
+    static List<Climb> climbs;
     static String authToken;
 
+    Locale locale = new Locale("es", "ES");
+    static DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .appendPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            .appendFraction(ChronoField.MILLI_OF_SECOND, 1, 9, true) // minimum 1 digit, maximum 9 digits, optional
+            .toFormatter();
 
 
     public static void setHttpClient(Context context){
@@ -44,7 +56,9 @@ public class DataAccess {
     }
 
 
-    public static boolean getTokenFromLogin(String username, String password, Context context) {
+    public static int getTokenFromLogin(String username, String password, Context context) {
+        int userId = 0;
+        int responseCode = 0;
         try{
 
             // Convert username and password to a JSON string
@@ -65,11 +79,16 @@ public class DataAccess {
             Response response = DataAccess.client.newCall(request).execute();
 
             JSONObject jResponse = new JSONObject(response.body().string());
-            MainActivity.setUserId(jResponse.getInt("id"));
             DataAccess.authToken = jResponse.getString("token");
-            return response.code() == 200;
+            responseCode = response.code();
+            userId = jResponse.getInt("id");
         } catch (Exception e) {
-            return false;
+            return 0;
+        }
+        if(responseCode == 200){
+            return userId;
+        } else {
+            return 0;
         }
     }
 
@@ -122,8 +141,9 @@ public class DataAccess {
     public static UserProfile getMyUserData(int id){
         userProfile = new UserProfile();
         try{
+            Log.d("USER DATA", SharedData.userId + " ");
             Request request = new Request.Builder()
-                    .url(webServiceURL + "user/" + MainActivity.getUserId())
+                    .url(webServiceURL + "user/" + SharedData.userId)
                     .get()
                     .addHeader("Cookie", "Authorization=" + DataAccess.authToken)
                     .build();
@@ -185,7 +205,8 @@ public class DataAccess {
                     .put("Difficulty", route.getDifficulty())
                     .put("Description", route.getDescription())
                     .put("Location", route.getLocation())
-                    .put("UserProfileID", MainActivity.getUserId())
+                    .put("UserProfileID", SharedData.userId)
+                    .put("Type", route.getType())
                     .toString();
 
             RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
@@ -200,7 +221,7 @@ public class DataAccess {
 
             JSONObject jResponse = new JSONObject(response.body().string());
 
-            JSONObject data = jResponse.getJSONObject("Data");
+            JSONObject data = jResponse.getJSONObject("data");
 
             routeId =  data.getInt("ID");
             return routeId;
@@ -208,5 +229,89 @@ public class DataAccess {
             e.printStackTrace();
         }
         return routeId;
+    }
+    /*
+    * JSONObject jResponse = new JSONObject(response.body().string());
+            JSONArray jArray = new JSONArray(jResponse.getJSONArray("data").toString());
+            if(jArray != null && jArray.length() > 0){
+                for(int i = 0; i < jArray.length(); i++){
+                    JSONObject jsonObject = jArray.getJSONObject(i);
+                    int id = jsonObject.getInt("ID");
+                    String type = jsonObject.getString("Type");
+                    String name = jsonObject.getString("Name");
+                    String difficulty = jsonObject.getString("Difficulty");
+                    String description = jsonObject.getString("Description");
+                    String location = jsonObject.getString("Location");
+                    int userId = jsonObject.getInt("UserProfileID");
+
+                    Route route = new Route(id, type, name, difficulty, description, location, userId);
+                    routes.add(route);
+                }
+    * */
+    public static List<Climb> fetchClimbs(){
+        climbs = new ArrayList<>();
+        try {
+            Request request = new Request.Builder()
+                    .url(webServiceURL + "climbs")
+                    .get()
+                    .addHeader("Cookie", "Authorization=" + DataAccess.authToken)
+                    .build();
+
+            Response response = DataAccess.client.newCall(request).execute();
+            JSONObject jResponse = new JSONObject(response.body().string());
+            JSONArray jArray = new JSONArray(jResponse.getJSONArray("data").toString());
+            if (jArray != null && jArray.length() > 0){
+                for(int i = 0; i < jArray.length(); i++){
+                    JSONObject jsonObject = jArray.getJSONObject(i);
+                    int routeId = jsonObject.getInt("RouteID");
+                    int id = jsonObject.getInt("ID");
+                    int userId = jsonObject.getInt("UserProfileID");
+                    String comment = jsonObject.getString("Comment");
+                    LocalDateTime date = LocalDateTime.parse(jsonObject.getString("Date"), formatter);
+
+                    Climb climb = new Climb(id, date, comment, routeId, userId);
+                    climbs.add(climb);
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return climbs;
+    }
+
+
+    public static int addNewClimb(Climb climb, int routeId, int userId){
+        int climbId = 0 ;
+        try{
+            Log.d("USER DATA ADD NEW CLIMB", climb.getUserProfileId() + "  " + climb.getRouteId());
+            String json = new JSONObject()
+                    .put("Id", climb.getId())
+                    .put("Comment", climb.getComment())
+                    .put("Date", climb.getDate().toString())
+                    .put("RouteId", routeId)
+                    .put("user_id", userId)
+                    .toString();
+            Log.d("JSON DATA", json);
+
+            Log.d("USER DATA ADD NEW CLIMB", SharedData.routeId + "  " + SharedData.userId);
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+            Request request = new Request.Builder()
+                    .url(webServiceURL + "climb/new")
+                    .post(body)
+                    .addHeader("Cookie", "Authorization=" + DataAccess.authToken)
+                    .build();
+
+            Log.d("REQUEST BODY", request.toString());
+            Response response = DataAccess.client.newCall(request).execute();
+
+            JSONObject jResponse = new JSONObject(response.body().string());
+
+            JSONObject data = jResponse.getJSONObject("data");
+            climbId = data.getInt("ID");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return climbId;
     }
 }

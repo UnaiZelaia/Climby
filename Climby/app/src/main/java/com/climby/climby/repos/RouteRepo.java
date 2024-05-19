@@ -30,6 +30,8 @@ public class RouteRepo {
 
     public int getMaxId(){ return routeDAO.getMaxId(); }
 
+    public String getRouteName(int id){ return routeDAO.getRouteName(id); }
+
     public void insert(Route route) {
         executor.execute(() -> {
             routeDAO.insert(route);

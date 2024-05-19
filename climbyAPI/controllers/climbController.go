@@ -11,17 +11,24 @@ import (
 
 func CreateClimb(ctx *gin.Context){
 	var body struct{
-		Date time.Time
+		Date string
 		Comment string
 		Images string
 		RouteId uint
 		UserId uint `json:"user_id"`
 	}
 
-	ctx.ShouldBindJSON(&body)
+	ctx.BindJSON(&body)
+
+	layout := "2006-01-02T15:04:05.999999999" // Matches the format used by Converters.localDateTimeStr
+	t, err := time.Parse(layout, body.Date)
+	if err != nil {
+    	// Handle parsing error
+    	return
+	}
 
 	climb := models.Climb{
-		Date: body.Date,
+		Date: t,
 		Comment: body.Comment,
 		Images: body.Images,
 		RouteID: body.RouteId,

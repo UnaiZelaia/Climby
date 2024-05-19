@@ -6,14 +6,19 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.climby.climby.DataAccess;
 import com.climby.climby.model.Climb;
+import com.climby.climby.model.Route;
 import com.climby.climby.repos.ClimbRepo;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class ClimbViewmodel extends AndroidViewModel {
     ClimbRepo climbRepo;
-    MutableLiveData<Climb> climbSelected = new MutableLiveData<>();;
+    MutableLiveData<Climb> climbSelected = new MutableLiveData<>();
+    Executor executor = Executors.newSingleThreadExecutor();
 
     public ClimbViewmodel(Application application){
         super(application);
@@ -47,4 +52,22 @@ public class ClimbViewmodel extends AndroidViewModel {
     public void delete(Climb climb){
         climbRepo.delete(climb);
     }
+
+    public void fetchUserClimbs(){
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<Climb> climbs = DataAccess.fetchClimbs();
+                if (climbs != null){
+                    for(int i = 0; i < climbs.size(); i++){
+                        insert(climbs.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    public void select(Climb climb) { climbSelected.setValue(climb); }
+
+    public MutableLiveData<Climb> selected(){ return climbSelected; }
 }

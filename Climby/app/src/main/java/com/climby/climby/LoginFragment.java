@@ -65,7 +65,9 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void run() {
                             try {
-                                if (DataAccess.getTokenFromLogin(username, password, getContext())){
+                                int userId = DataAccess.getTokenFromLogin(username, password, getContext());
+                                SharedData.userId = userId;
+                                if (userId != 0){
                                     Intent intent = new Intent(getContext(), MainActivity.class);
                                     startActivity(intent);
                                 } else {

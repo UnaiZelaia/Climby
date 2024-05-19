@@ -23,6 +23,9 @@ public interface RouteDAO {
     @Query("SELECT MAX(id) AS max_id FROM Route")
     public int getMaxId();
 
+    @Query("SELECT name FROM Route WHERE id = :id")
+    public String getRouteName(int id);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insert(Route route);
 

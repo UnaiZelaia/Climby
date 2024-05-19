@@ -21,6 +21,7 @@ public class RouteViewmodel extends AndroidViewModel {
     RouteRepo routeRepo;
     MutableLiveData<Route> routeSelected = new MutableLiveData<>();
 
+
     Executor executor = Executors.newSingleThreadExecutor();
 
     public RouteViewmodel(Application application) {
@@ -37,6 +38,8 @@ public class RouteViewmodel extends AndroidViewModel {
     }
 
     public int getMaxId() { return routeRepo.getMaxId(); }
+
+    public String getRouteName(int id){ return routeRepo.getRouteName(id); }
 
     public void delete(Route route) {
         routeRepo.delete(route);
@@ -71,4 +74,5 @@ public class RouteViewmodel extends AndroidViewModel {
     public MutableLiveData<Route> selected(){
         return routeSelected;
     }
+
 }

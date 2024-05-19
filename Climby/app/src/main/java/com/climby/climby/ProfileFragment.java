@@ -54,11 +54,10 @@ public class ProfileFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         userProfileViewmodel = new ViewModelProvider(requireActivity()).get(UserProfileViewmodel.class);
         navController = Navigation.findNavController(view);
-        System.out.println(MainActivity.getUserId());
 
-        userProfileViewmodel.fetchUserData(MainActivity.getUserId());
+        userProfileViewmodel.fetchUserData(SharedData.userId);
 
-        LiveData<UserProfile> userProfileLiveData = userProfileViewmodel.getById(MainActivity.getUserId());
+        LiveData<UserProfile> userProfileLiveData = userProfileViewmodel.getById(SharedData.userId);
         userProfileLiveData.observe(getViewLifecycleOwner(), new Observer<UserProfile>() {
             @Override
             public void onChanged(UserProfile userProfile) {

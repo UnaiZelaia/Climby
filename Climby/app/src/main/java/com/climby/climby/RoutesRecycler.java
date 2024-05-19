@@ -102,6 +102,7 @@ public class RoutesRecycler extends Fragment {
                 @Override
                 public void onClick(View v) {
                     routeViewmodel.select(route);
+                    SharedData.routeId = route.getId();
                     navController.navigate(R.id.action_routesRecycler_to_routeDetailFragment);
                 }
             });
